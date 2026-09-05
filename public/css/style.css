@@ -1,0 +1,847 @@
+/* The Gilden Protocol - Leica Darkroom & Akademie Theme */
+:root {
+  --bg-core: #0d0d0f;
+  --bg-card: #151518;
+  --bg-elevated: #1c1c22;
+  --border: #282830;
+  --border-focus: #444450;
+  --leica-red: #E30613;
+  --leica-red-glow: rgba(227, 6, 19, 0.25);
+  --text-main: #f4f4f6;
+  --text-muted: #8e8e99;
+  --text-dim: #5c5c66;
+  --gold: #dfb15b;
+  --green: #2ecc71;
+  --discomfort-orange: #ff5722;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Fira Code", Menlo, Monaco, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-core);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Header & Leica Badge */
+header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.leica-red-dot {
+  width: 38px;
+  height: 38px;
+  background-color: var(--leica-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px var(--leica-red-glow);
+  font-weight: 900;
+  font-size: 14px;
+  font-style: italic;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.title-group h1 {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-main);
+}
+
+.title-group .subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  font-family: var(--font-mono);
+}
+
+.countdown-badge {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.countdown-badge .target-label {
+  color: var(--leica-red);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+/* Navigation Tabs */
+nav.tab-nav {
+  background: #111114;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 4px;
+  padding: 0 28px;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: var(--text-main);
+}
+
+.tab-btn.active {
+  color: var(--text-main);
+  border-bottom: 2px solid var(--leica-red);
+  background: rgba(227, 6, 19, 0.05);
+}
+
+/* Main Container */
+main {
+  flex: 1;
+  max-width: 1380px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Gear Strip */
+.gear-strip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.gear-pill-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gear-pill {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gear-pill.active {
+  border-color: var(--leica-red);
+  color: #fff;
+}
+
+/* Vault Progress Summary Cards */
+.vault-header-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.vault-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.vault-stat-card.comfort {
+  border-top: 4px solid var(--green);
+}
+
+.vault-stat-card.discomfort {
+  border-top: 4px solid var(--leica-red);
+}
+
+.vault-stat-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.vault-title {
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vault-count {
+  font-size: 32px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+}
+
+.vault-progress-bar {
+  height: 8px;
+  background: var(--bg-elevated);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 12px 0 8px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.4s ease;
+}
+
+.comfort .progress-fill { background: var(--green); }
+.discomfort .progress-fill { background: var(--leica-red); }
+
+/* Curriculum / Roadmap Styles */
+.roadmap-phase-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.phase-header {
+  padding: 20px 24px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.phase-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--leica-red);
+  letter-spacing: 1px;
+}
+
+.bruce-quote-banner {
+  background: rgba(227, 6, 19, 0.08);
+  border-left: 3px solid var(--leica-red);
+  padding: 14px 20px;
+  margin: 16px 24px;
+  font-style: italic;
+  color: #ffb8bb;
+  font-size: 14px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.challenges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 16px;
+  padding: 16px 24px 24px 24px;
+}
+
+.challenge-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.challenge-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-focus);
+}
+
+.challenge-card-top .week-badge {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.challenge-card-top h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}
+
+.challenge-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.recipe-box {
+  background: #111114;
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: #b3b3bf;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Critique Chamber */
+.critique-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 28px;
+}
+
+.uploader-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dropzone {
+  border: 2px dashed var(--border-focus);
+  border-radius: var(--radius-md);
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--leica-red);
+  background: rgba(227, 6, 19, 0.04);
+}
+
+.dropzone-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: var(--leica-red);
+}
+
+.preview-container {
+  max-height: 380px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-container img {
+  max-width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+}
+
+.meta-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-field label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.input-field input, .input-field select, .input-field textarea {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: var(--font-sans);
+}
+
+.input-field input:focus, .input-field select:focus, .input-field textarea:focus {
+  outline: none;
+  border-color: var(--leica-red);
+}
+
+.action-btn {
+  background: var(--leica-red);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: #ff1a28;
+  box-shadow: 0 0 14px var(--leica-red-glow);
+}
+
+.critique-results-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bravery-score-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bravery-dial {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.bravery-num {
+  font-size: 42px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  color: var(--leica-red);
+}
+
+.bravery-denom {
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.agent-critique-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+}
+
+.agent-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.agent-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+}
+
+.agent-bruce .agent-avatar {
+  background: var(--leica-red);
+  color: #fff;
+  border-color: #ff3340;
+}
+
+.agent-name {
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.agent-title {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.agent-body {
+  font-size: 14px;
+  color: #dedee6;
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+/* Zone Focus Simulator */
+.zone-sim-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 28px;
+}
+
+.zone-controls {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-family: var(--font-mono);
+}
+
+.slider-group input[type="range"] {
+  accent-color: var(--leica-red);
+  cursor: pointer;
+}
+
+.zone-display-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.distance-scale-visualizer {
+  background: #0a0a0c;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px 20px;
+  position: relative;
+  height: 130px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.scale-track {
+  height: 14px;
+  background: #1c1c24;
+  border-radius: 7px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sharp-zone-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #ff1a28, #E30613);
+  box-shadow: 0 0 12px var(--leica-red-glow);
+  transition: all 0.15s ease;
+}
+
+.scale-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  margin-top: 10px;
+}
+
+.zone-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.zone-stat-box {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  text-align: center;
+}
+
+.zone-stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  margin-bottom: 6px;
+}
+
+.zone-stat-val {
+  font-size: 24px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--text-main);
+}
+
+/* Darkroom Contact Sheet Lab */
+.contact-sheet-board {
+  background: #000000;
+  border: 2px solid #1a1a1a;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  padding: 32px;
+  border-radius: var(--radius-sm);
+  margin-top: 16px;
+}
+
+.contact-sheet-header {
+  border-bottom: 1px solid #333;
+  padding-bottom: 14px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #bbb;
+  letter-spacing: 1px;
+}
+
+.contact-sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.contact-frame {
+  background: #080808;
+  border: 1px solid #222;
+  padding: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s ease;
+}
+
+.contact-frame:hover {
+  transform: scale(1.02);
+}
+
+.rebate-top, .rebate-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: #666;
+  padding: 4px 2px;
+  text-transform: uppercase;
+}
+
+.frame-image-wrapper {
+  position: relative;
+  aspect-ratio: 3/2;
+  overflow: hidden;
+  background: #111;
+}
+
+.frame-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.frame-tag-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.frame-tag-badge.comfort {
+  background: rgba(46, 204, 113, 0.85);
+  color: #000;
+}
+
+.frame-tag-badge.discomfort {
+  background: rgba(227, 6, 19, 0.85);
+  color: #fff;
+}
+
+/* Chinagraph Red Grease Pencil Overlay */
+.grease-ring-overlay {
+  display: none;
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  border: 4px solid var(--leica-red);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(227, 6, 19, 0.8), inset 0 0 10px rgba(227, 6, 19, 0.5);
+  pointer-events: none;
+}
+
+.contact-frame.grease-selected .grease-ring-overlay {
+  display: block;
+}
+
+/* Field Companion Timer */
+.sprint-container {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  text-align: center;
+}
+
+.timer-digits {
+  font-size: 80px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  letter-spacing: -2px;
+  color: var(--text-main);
+  margin: 16px 0;
+}
+
+.sprint-prompt-box {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  text-align: left;
+  margin: 24px 0;
+}
+
+.sprint-prompt-title {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--leica-red);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.sprint-prompt-text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-main);
+  margin-bottom: 12px;
+}
+
+.sprint-mindset {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .critique-layout, .zone-sim-layout, .vault-header-grid {
+    grid-template-columns: 1fr;
+  }
+  header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}

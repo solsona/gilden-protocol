@@ -1,0 +1,16 @@
+{
+  "name": "The Gilden Protocol",
+  "short_name": "Gilden",
+  "description": "Street Photography Training & Critique Engine for Leica Masterclass",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d0d0f",
+  "theme_color": "#E30613",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
