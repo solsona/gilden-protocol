@@ -3,6 +3,36 @@
 
 const CURRICULUM_DATA = {
   title: "The Gilden Protocol: 18 Weeks to Leica Mexico 2027",
+  specialEventDrill: {
+    id: "zombie-walk-cdmx-2026",
+    badge: "OCTOBER 17-18, 2026 • CDMX SPECIAL EVENT",
+    title: "Marcha Zombie México: The Gilden Intensive",
+    subtitle: "Consolidating Weeks 4 through 14 into One High-Voltage 3-Hour Street Session",
+    summary: "Parades eliminate the #1 barrier in street photography: social fear. Zombie Walk participants are actively in character, adorned in extreme prosthetics and theatrical blood, expecting to perform. This is the ultimate crucible to compress 10 weeks of footwork, zone focus, left-hand off-camera flash, and 3-foot proximity into one afternoon.",
+    consolidatedWeeks: [
+      { week: "Week 4", name: "The 45° Intercept Step", takeaway: "Don't shoot from the sidewalk curb. Stride diagonally into the zombie procession at 1.2m, pivot hips, frame, click, follow through." },
+      { week: "Weeks 5–6", name: "Zone Focus & Harsh Daylight", takeaway: "Lock manual focus at 1.1m (3.5 ft) on Lumix 24mm or APO 35mm. 1/250s at f/8, ISO 200. Underexpose ambient daylight by 1.5 stops so the flash isolates the subject." },
+      { week: "Week 7", name: "Character & Texture Hunting", takeaway: "Hunt for rotting latex textures, exposed teeth, fake blood sheen, and manic character intensity." },
+      { week: "Weeks 9–11", name: "Left-Hand High Flash Strike", takeaway: "Left arm raised 45° above lens axis pointing down. Pop strobe at 1.0m to create harsh sculptural shadows." },
+      { week: "Week 13", name: "The 3-Foot Collision Strike", takeaway: "Commit to arm's-length proximity (<1.0m). The 24mm wide angle makes the zombie loom terrifyingly large." },
+      { week: "Week 14", name: "Raw Emotional Expression", takeaway: "Avoid smiling posed zombies. Trigger only when they snarl, scream, or thrust bloody hands toward the lens." }
+    ],
+    gearRecipe: {
+      camera: "Leica SL3-P (44MP)",
+      lens: "Panasonic Lumix S 24mm f/1.8 (or Summicron-M APO 35mm f/2 ASPH)",
+      exposure: "Manual: 1/250s (Max Sync) • f/8.0 • ISO 200 • Daylight WB",
+      focusMode: "Locked Manual Zone Focus at 1.1m / 3.5 ft (DoF: 0.81m to 1.75m)",
+      flash: "Off-Camera Strobe in left hand • Manual 1/16 to 1/32 power • Angled 45° down"
+    },
+    tacticalChecklist: [
+      "1. Calibration: Before leaving home, lock focus at 1.1m, set 1/250s @ f/8, test flash burst.",
+      "2. Footwork: Walk against or across the parade flow along Reforma / Monumento a la Revolución.",
+      "3. Isolate: Single out one compelling character. Ignore the spectators.",
+      "4. The Strike: Diagonal step to 1.0m, raise flash high with left hand, frame at eye level, click!",
+      "5. Follow-through: Big genuine smile, nod, '¡Qué chingón tu maquillaje!', and keep moving."
+    ],
+    targetQuota: "25 Discomfort Frames (≤1.2m + Flash) + 10 Comfort Frames (Contextual)"
+  },
   phases: [
     {
       phaseNumber: 1,

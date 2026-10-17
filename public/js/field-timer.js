@@ -3,12 +3,13 @@
 
 class FieldTimer {
   constructor() {
+    this.mode = "street";
     this.totalSeconds = 15 * 60; // 15 mins default
     this.remainingSeconds = this.totalSeconds;
     this.timerId = null;
     this.isRunning = false;
     this.currentPromptIndex = 0;
-    this.prompts = [
+    this.streetPrompts = [
       {
         title: "DRILL 1: The Gaze Anchor (No Shooting Yet)",
         instruction: "For the next 3 minutes: Walk with shoulders back and head high. Hold eye contact with approaching strangers for 1 full second until they break contact. Train your nervous system that you belong here.",
@@ -35,6 +36,44 @@ class FieldTimer {
         mindset: "I love the people I photograph. They just don't know it yet."
       }
     ];
+
+    this.zombiePrompts = [
+      {
+        title: "ZOMBIE DRILL 1: The 45° Horde Intercept (Week 4)",
+        instruction: "Do not stand on the curb like a spectator. Stride diagonally into the zombie procession at 1.2m. Take the shot as they walk into your 1.1m focal plane.",
+        mindset: "Don't ask for permission. They came to be seen."
+      },
+      {
+        title: "ZOMBIE DRILL 2: Left-Arm High Strobe (Weeks 9–11)",
+        instruction: "Extend your left arm high at 45 degrees, pointing the flash down. Fire at 1 meter! The high angle casts deep jawline shadows and makes fake blood glisten like wet enamel.",
+        mindset: "Flash is sculpture and violence. Blast through the daylight."
+      },
+      {
+        title: "ZOMBIE DRILL 3: The Snarl & Mouth Hunter (Week 14)",
+        instruction: "Reject closed mouths and static poses! Wait for the split second they roar, bare decaying teeth, or reach bloody hands at your lens.",
+        mindset: "Catch them in motion, not in posing."
+      },
+      {
+        title: "ZOMBIE DRILL 4: In-Your-Face 24mm Proximity (<0.9m) (Week 13)",
+        instruction: "Step inside 3 feet. The 24mm on your Leica SL3-P will make their prosthetics loom terrifyingly large. Embrace the proximity adrenaline!",
+        mindset: "If your zombies aren't scary enough, you're not close enough."
+      },
+      {
+        title: "ZOMBIE DRILL 5: The Friendly Mexican Exit",
+        instruction: "Immediately after the pop, drop the camera, big smile, give them a warm thumb up: '¡Qué chingón tu maquillaje, hermano!' and keep moving forward.",
+        mindset: "You take the photo without apology, but you treat them with warmth."
+      }
+    ];
+
+    this.prompts = this.streetPrompts;
+  }
+
+  setMode(mode, minutes = null) {
+    this.mode = mode;
+    this.prompts = mode === "zombie" ? this.zombiePrompts : this.streetPrompts;
+    this.currentPromptIndex = 0;
+    const defaultMins = mode === "zombie" ? 25 : 15;
+    this.reset(minutes || defaultMins);
   }
 
   start(onTick, onPromptChange) {

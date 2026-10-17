@@ -52,6 +52,14 @@ class ZoneFocusCalculator {
   getPresets() {
     return [
       {
+        id: "zombie-walk-cdmx",
+        name: "🧟 Marcha Zombie CDMX Preset (1.1m / f8)",
+        desc: "Parade Crucible: 24mm at f/8 gives 0.81m to 1.75m tack-sharp DoF. Ideal for diagonal intercepts.",
+        focalLength: 24,
+        aperture: 8.0,
+        focusDistance: 1.1
+      },
+      {
         id: "gilden-strike",
         name: "Bruce Gilden 1.2m Strike",
         desc: "The classic in-your-face distance. Crisp focus from arm's reach to walking distance.",

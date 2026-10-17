@@ -896,3 +896,118 @@ main {
   gap: 16px;
 }
 
+/* Special Event Card (Marcha Zombie / Masterclass Intensives) */
+.special-event-card {
+  background: linear-gradient(145deg, rgba(227, 6, 19, 0.12) 0%, rgba(21, 21, 24, 0.98) 100%);
+  border: 1px solid rgba(227, 6, 19, 0.45);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 30px rgba(227, 6, 19, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.special-event-card::before {
+  content: "LEICA MASTERCLASS INTENSIVE";
+  position: absolute;
+  top: 14px;
+  right: -25px;
+  transform: rotate(15deg);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+  font-family: var(--font-mono);
+}
+
+.special-badge {
+  display: inline-block;
+  background: var(--leica-red);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  margin-bottom: 12px;
+  box-shadow: 0 0 10px var(--leica-red-glow);
+}
+
+.consolidated-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.consolidated-item {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--gold);
+}
+
+.consolidated-item.strike {
+  border-left-color: var(--leica-red);
+}
+
+.consolidated-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--gold);
+  font-family: var(--font-mono);
+  margin-bottom: 4px;
+}
+
+.consolidated-item.strike .consolidated-tag {
+  color: var(--leica-red);
+}
+
+.checklist-box {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-top: 18px;
+}
+
+.checklist-box ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+/* Field Sprint Mode Pills */
+.mode-pill {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mode-pill:hover {
+  color: var(--text-main);
+  border-color: var(--border-focus);
+}
+
+.mode-pill.active {
+  background: var(--leica-red);
+  border-color: var(--leica-red);
+  color: #ffffff;
+  box-shadow: 0 0 14px var(--leica-red-glow);
+}
+
+

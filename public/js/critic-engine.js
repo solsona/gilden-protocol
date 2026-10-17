@@ -11,6 +11,7 @@ class CriticEngine {
       flashFired = true,
       distance = 1.2,
       isHipShot = false,
+      isZombieWalk = false,
       userFeeling = "nervous", // "comfortable", "nervous", "terrified", "in_control"
       title = "Untitled Frame"
     } = data;
@@ -66,7 +67,8 @@ class CriticEngine {
       flashFired,
       isHipShot,
       bravery,
-      userFeeling
+      userFeeling,
+      isZombieWalk
     });
 
     const techCritique = CriticEngine.generateTechCritique({
@@ -75,7 +77,8 @@ class CriticEngine {
       shutterSpeed,
       iso,
       flashFired,
-      distance
+      distance,
+      isZombieWalk
     });
 
     const curatorCritique = CriticEngine.generateCuratorCritique({
@@ -98,7 +101,25 @@ class CriticEngine {
     };
   }
 
-  static generateBruceCritique({ focalLength, distance, flashFired, isHipShot, bravery, userFeeling }) {
+  static generateBruceCritique({ focalLength, distance, flashFired, isHipShot, bravery, userFeeling, isZombieWalk }) {
+    if (isZombieWalk) {
+      if (isHipShot) {
+        return "You shot a ZOMBIE from the hip?! Are you kidding me?! These people spent four hours gluing latex gore, tearing their clothes, and painting fake rotting flesh on their faces so they could be SEEN! If you can't put the camera to your eye at a zombie parade, what will you do with real commuters? Put the Leica to your eye!";
+      }
+      if (distance > 2.5) {
+        return "You're at the Marcha Zombie in CDMX and you're shooting from five meters away like a frightened tourist? Get in the arena! They want to snarl at you! Close the distance to 3 feet!";
+      }
+      if (distance <= 1.0 && flashFired) {
+        return "YES! BOOM! That is Bruce Gilden in Mexico City! The flash exploded right off the fake blood and latex wounds! Look at those eyes popping out under the 24mm wide angle. That's not a polite tourist photo; that's raw, visceral street theater. Right into the Discomfort Vault!";
+      }
+      if (distance <= 1.3 && !flashFired) {
+        return "The proximity is right—you were right in their face! But where is the strobe?! At a high-energy parade with harsh daylight, the flash is what separates the zombie from the crowd and freezes the dripping makeup. Next time, left arm high and pop that flash!";
+      }
+      if (distance <= 2.0 && flashFired) {
+        return "Good flash pop, but take one more step into the horde! At 1.8m you're giving them too much room. With the 24mm on your SL3-P, you need to be at 3 feet so the viewer feels the zombie's breath on their neck!";
+      }
+    }
+
     if (isHipShot) {
       return "Listen to me: You shot this from the hip, didn't you? Look at that crooked angle! You're afraid of being seen. If you're afraid, don't photograph people on the street! Bring that Leica to your eye. Stand tall. Look them in the face. You have a right to be on that sidewalk just like they do!";
     }
@@ -122,8 +143,12 @@ class CriticEngine {
     return "It's an okay picture. But 'okay' doesn't cut it in Mexico City. I don't want polite pictures. I want pictures that grab you by the lapels and shake you. Push harder on the next roll.";
   }
 
-  static generateTechCritique({ focalLength, aperture, shutterSpeed, iso, flashFired, distance }) {
+  static generateTechCritique({ focalLength, aperture, shutterSpeed, iso, flashFired, distance, isZombieWalk }) {
     const lines = [];
+
+    if (isZombieWalk) {
+      lines.push("• Marcha Zombie Strobe Contrast: Direct off-camera flash creates extreme specular highlights on latex prosthetics, fake blood gloss, and dental stains while crushing ambient parade crowd distractions.");
+    }
 
     if (focalLength === 24) {
       lines.push("• 24mm Perspective: The wide field of view creates dynamic geometric stretch on facial features. At " + distance + "m, the subject dominates the frame while keeping environmental context crisp.");

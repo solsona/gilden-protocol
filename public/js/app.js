@@ -139,6 +139,63 @@ function initRoadmap() {
 
   container.innerHTML = "";
 
+  // Render Special Event Intensive if defined
+  if (CURRICULUM_DATA.specialEventDrill) {
+    const s = CURRICULUM_DATA.specialEventDrill;
+    const specialCard = document.createElement("div");
+    specialCard.className = "special-event-card";
+
+    const consolidatedItemsHtml = s.consolidatedWeeks.map(item => `
+      <div class="consolidated-item ${item.name.toLowerCase().includes('flash') || item.name.toLowerCase().includes('strike') || item.name.toLowerCase().includes('collision') ? 'strike' : ''}">
+        <div class="consolidated-tag">${item.week} • ${item.name}</div>
+        <div style="font-size: 13px; color: var(--text-main); line-height: 1.4;">${item.takeaway}</div>
+      </div>
+    `).join("");
+
+    const checklistHtml = s.tacticalChecklist.map(step => `
+      <li>✓ ${step}</li>
+    `).join("");
+
+    specialCard.innerHTML = `
+      <div class="special-badge">${s.badge}</div>
+      <h3 style="font-size: 22px; font-weight: 800; text-transform: uppercase; color: #fff;">${s.title}</h3>
+      <div style="font-size: 13px; color: var(--gold); font-weight: 600; margin-top: 4px; margin-bottom: 12px; font-family: var(--font-mono);">
+        ${s.subtitle}
+      </div>
+      <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6; max-width: 900px;">
+        ${s.summary}
+      </p>
+
+      <div style="margin-top: 18px; display: flex; gap: 14px; flex-wrap: wrap;">
+        <div class="recipe-box" style="flex: 1; min-width: 280px;">
+          <div style="color: var(--leica-red); font-weight: 800; font-size: 12px; margin-bottom: 6px; font-family: var(--font-mono);">⚡ CRUCIBLE GEAR RECIPE</div>
+          <div><strong>📷 CAMERA:</strong> ${s.gearRecipe.camera}</div>
+          <div><strong>🔘 LENS:</strong> ${s.gearRecipe.lens}</div>
+          <div><strong>⚙️ SETTINGS:</strong> ${s.gearRecipe.exposure}</div>
+          <div><strong>🎯 FOCUS:</strong> ${s.gearRecipe.focusMode}</div>
+          <div><strong>⚡ FLASH:</strong> ${s.gearRecipe.flash}</div>
+        </div>
+        <div class="checklist-box" style="flex: 1; min-width: 280px; margin-top: 0;">
+          <div style="color: var(--gold); font-weight: 800; font-size: 12px; margin-bottom: 6px; font-family: var(--font-mono);">📋 5-STEP PARADE PROTOCOL</div>
+          <ul>${checklistHtml}</ul>
+          <div style="margin-top: 10px; font-size: 11px; font-weight: 700; color: var(--leica-red); font-family: var(--font-mono);">
+            QUOTA: ${s.targetQuota}
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <div style="font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-main);">
+          Consolidated Weeks 4–14 Field Takeaways
+        </div>
+        <div class="consolidated-grid">
+          ${consolidatedItemsHtml}
+        </div>
+      </div>
+    `;
+    container.appendChild(specialCard);
+  }
+
   CURRICULUM_DATA.phases.forEach(phase => {
     const phaseCard = document.createElement("div");
     phaseCard.className = "roadmap-phase-card";
@@ -362,6 +419,9 @@ function initCritiqueUploader() {
   }
 
   btnCritique.addEventListener("click", async () => {
+    const inputIsZombie = document.getElementById("input-is-zombie");
+    const isZombie = inputIsZombie ? inputIsZombie.checked : false;
+
     const photoData = {
       id: "photo-" + Date.now(),
       title: inputTitle.value.trim() || "Untitled Frame",
@@ -372,6 +432,7 @@ function initCritiqueUploader() {
       flashFired: inputFlash.value === "true",
       distance: Number(inputDistance.value),
       isHipShot: inputHipshot.value === "true",
+      isZombieWalk: isZombie,
       userFeeling: inputFeeling.value,
       reflection: inputReflection.value,
       createdAt: new Date().toISOString()
@@ -803,6 +864,35 @@ function initFieldTimer() {
   const btnPause = document.getElementById("btn-timer-pause");
   const btnReset = document.getElementById("btn-timer-reset");
 
+  const btnModeStreet = document.getElementById("btn-mode-street");
+  const btnModeZombie = document.getElementById("btn-mode-zombie");
+
+  if (btnModeStreet && btnModeZombie) {
+    btnModeStreet.addEventListener("click", () => {
+      btnModeStreet.classList.add("active");
+      btnModeZombie.classList.remove("active");
+      timer.setMode("street", 15);
+      display.textContent = "15:00";
+      drillTitle.textContent = timer.prompts[0].title;
+      drillText.textContent = timer.prompts[0].instruction;
+      drillMindset.textContent = `"${timer.prompts[0].mindset}"`;
+      btnStart.style.display = "inline-flex";
+      btnPause.style.display = "none";
+    });
+
+    btnModeZombie.addEventListener("click", () => {
+      btnModeZombie.classList.add("active");
+      btnModeStreet.classList.remove("active");
+      timer.setMode("zombie", 25);
+      display.textContent = "25:00";
+      drillTitle.textContent = timer.prompts[0].title;
+      drillText.textContent = timer.prompts[0].instruction;
+      drillMindset.textContent = `"${timer.prompts[0].mindset}"`;
+      btnStart.style.display = "inline-flex";
+      btnPause.style.display = "none";
+    });
+  }
+
   btnStart.addEventListener("click", () => {
     btnStart.style.display = "none";
     btnPause.style.display = "inline-flex";
@@ -825,8 +915,9 @@ function initFieldTimer() {
   });
 
   btnReset.addEventListener("click", () => {
-    timer.reset(15);
-    display.textContent = "15:00";
+    const mins = timer.mode === "zombie" ? 25 : 15;
+    timer.reset(mins);
+    display.textContent = `${mins}:00`;
     btnStart.style.display = "inline-flex";
     btnPause.style.display = "none";
     drillTitle.textContent = timer.prompts[0].title;

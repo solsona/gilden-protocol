@@ -145,6 +145,12 @@
                 <option value="comfortable">☕ Fully Comfortable / Relaxed</option>
               </select>
             </div>
+            <div class="input-field" style="grid-column: 1 / -1; background: rgba(227, 6, 19, 0.08); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid rgba(227, 6, 19, 0.25);">
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; text-transform: none; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 0;">
+                <input type="checkbox" id="input-is-zombie" style="accent-color: var(--leica-red); width: 17px; height: 17px; cursor: pointer;">
+                <span>🧟 Marcha Zombie México / Street Parade Encounter</span>
+              </label>
+            </div>
           </div>
 
           <div class="input-field">
@@ -443,6 +449,11 @@
         <p style="color: var(--text-muted); font-size: 14px; margin-top: 6px;">
           Put in your earphones. Start your walk. This timer will rotate audio prompts every 3 minutes to keep you in flow state and prevent hip-shooting.
         </p>
+
+        <div class="sprint-mode-toggles" style="display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap;">
+          <button class="mode-pill active" id="btn-mode-street" data-mode="street">🚶 Standard Street Walk (15m)</button>
+          <button class="mode-pill" id="btn-mode-zombie" data-mode="zombie">🧟 Marcha Zombie CDMX Sprint (25m)</button>
+        </div>
 
         <div class="timer-digits" id="timer-display">15:00</div>
 
