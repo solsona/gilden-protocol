@@ -1,0 +1,12 @@
+{
+  "name": "gilden-protocol",
+  "version": "1.0.0",
+  "description": "Street Photography Training & Multi-Agent Critique System for Leica Masterclass",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["leica", "street-photography", "bruce-gilden", "zone-focus", "critique"],
+  "author": "solsona",
+  "license": "MIT"
+}

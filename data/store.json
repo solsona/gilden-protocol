@@ -1,0 +1,84 @@
+{
+  "profile": {
+    "photographer": "Solsona",
+    "camera": "Leica SL3-P (44MP Full-Frame)",
+    "lenses": [
+      { "id": "lumix-24", "name": "Panasonic Lumix S 24mm f/1.8", "type": "Wide Prime", "role": "Gilden Close-Proximity Strike (<1.2m)", "status": "On the way" },
+      { "id": "summicron-35", "name": "Leica Summicron-M APO 35mm f/2 ASPH", "type": "Manual M-Glass", "role": "Zone-Focusing Muscle Memory", "status": "Ready (with M-to-L Adapter)" },
+      { "id": "lumix-50", "name": "Panasonic Lumix S 50mm f/1.8", "type": "Normal Prime", "role": "Comfort Portraits & Environmental Context", "status": "On the way" }
+    ],
+    "flashSetup": "Handheld Off-Camera Flash (High Angle, Left Hand, Sync Trigger)",
+    "targetEvent": {
+      "name": "Masterclass Leica con Bruce Gilden @ Leica Mexico",
+      "date": "2027-01-15",
+      "url": "https://leica-camera.com/es-MX/akademie/event/master-class-leica-con-bruce-gilden",
+      "goalComfort": 50,
+      "goalDiscomfort": 50
+    }
+  },
+  "photos": [
+    {
+      "id": "sample-1",
+      "title": "Pride Parade Feather Portrait",
+      "vault": "comfort",
+      "imageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80",
+      "focalLength": 50,
+      "aperture": 2.0,
+      "shutterSpeed": "1/1000s",
+      "iso": 100,
+      "flashFired": false,
+      "distance": 1.8,
+      "braveryScore": 5,
+      "critique": {
+        "bruce": "Nice face, clean light. But it's polite. You asked permission, they posed, they gave you their 'camera face'. Where is the grit? Where is the surprise? Don't let people prepare their masks for you!",
+        "tech": "Sharp rendition on the eyes, beautiful shallow depth of field with the 50mm. Exposure is well balanced against midday sun.",
+        "curator": "Strong entry for the Comfort Vault. Demonstrates portrait connection and clean composition."
+      },
+      "reflection": "Felt completely relaxed. I walked up to them at the parade, complimented their headpiece, and they smiled. Total comfort zone.",
+      "tags": ["Parade", "Consent Portrait", "50mm", "Natural Light"],
+      "createdAt": "2026-08-15T14:30:00Z"
+    },
+    {
+      "id": "sample-2",
+      "title": "Subway Rush Hour Confrontation",
+      "vault": "discomfort",
+      "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1000&q=80",
+      "focalLength": 24,
+      "aperture": 8.0,
+      "shutterSpeed": "1/250s",
+      "iso": 400,
+      "flashFired": true,
+      "distance": 0.9,
+      "braveryScore": 9,
+      "critique": {
+        "bruce": "NOW we're talking! Look at that furrow in the brow! You didn't give him time to hide. The flash caught the sweat on his temple and the texture of his collar. That's a real character. Next time, take half a step closer!",
+        "tech": "Masterful daylight flash sync at 1/250s. The 24mm creates dramatic perspective stretch without distorting the skull awkwardly. Flash at ~1/16th froze the motion crisp edge-to-edge.",
+        "curator": "Exceptional Discomfort submission. Raw, confrontational, quintessential Magnum street energy."
+      },
+      "reflection": "Heart was beating at 145 BPM. He was walking fast out of the station. I held the flash high in my left hand, stepped directly into his path, framed at eye level, POP! He blinked, I nodded and kept walking. Terrifying but exhilarating.",
+      "tags": ["Gilden Style", "Flash", "24mm", "Close Proximity", "Under 1m"],
+      "createdAt": "2026-08-28T18:15:00Z"
+    },
+    {
+      "id": "sample-3",
+      "title": "Shadow Crosser (Safe Distance)",
+      "vault": "comfort",
+      "imageUrl": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1000&q=80",
+      "focalLength": 35,
+      "aperture": 8.0,
+      "shutterSpeed": "1/500s",
+      "iso": 200,
+      "flashFired": false,
+      "distance": 4.2,
+      "braveryScore": 3,
+      "critique": {
+        "bruce": "Why are you all the way across the street? The geometry is pretty, but photography isn't about hiding in the shadows playing Cartier-Bresson geometry games. Get in the arena!",
+        "tech": "Summicron-M APO 35mm optical perfection is visible in the microcontrast of the pavement. Zone focused accurately from 3m to infinity.",
+        "curator": "A classic graphic street composition. Good contrast and silhouetting, ideal for the Comfort balance."
+      },
+      "reflection": "I was standing across the street waiting for someone to enter the light beam. Safe, nobody knew I was there.",
+      "tags": ["Geometry", "Shadows", "35mm APO", "Distance"],
+      "createdAt": "2026-08-20T11:00:00Z"
+    }
+  ]
+}

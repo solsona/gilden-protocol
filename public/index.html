@@ -1,89 +1,481 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.18.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.18.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.18.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.18.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.18.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.18.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.18.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.18.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.18.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.18.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Gilden Protocol | Leica Akademie Masterclass Prep</title>
+  <meta name="theme-color" content="#E30613">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Gilden">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css?v=2.5.0">
+</head>
+<body>
+  <!-- Leica Header -->
+  <header>
+    <div class="brand-wrapper">
+      <div class="leica-red-dot">Leica</div>
+      <div class="title-group">
+        <h1>The Gilden Protocol</h1>
+        <div class="subtitle">STREET MASTERY & CRITIQUE ENGINE • LEICA AKADEMIE MEXICO 2027</div>
+      </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    <div class="countdown-badge">
+      <span class="target-label">Masterclass:</span>
+      <span id="countdown-display">Calculating...</span>
+    </div>
+  </header>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+  <!-- Navigation Tabs -->
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="roadmap">🛣️ 18-Week Roadmap</button>
+    <button class="tab-btn" data-tab="critique">⚡ Critique Chamber</button>
+    <button class="tab-btn" data-tab="vault">🗄️ 50/50 Dual Vault</button>
+    <button class="tab-btn" data-tab="zone-focus">🎯 Zone Focus Simulator</button>
+    <button class="tab-btn" data-tab="contact-sheet">🎞️ Darkroom Contact Sheet</button>
+    <button class="tab-btn" data-tab="field-sprint">⏱️ Field Companion</button>
+  </nav>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
+  <main>
+    <!-- Gear Calibration Strip -->
+    <div class="gear-strip">
+      <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); font-family: var(--font-mono);">
+        Active Setup:
+      </div>
+      <div class="gear-pill-group">
+        <div class="gear-pill active">📷 Leica SL3-P (44MP)</div>
+        <div class="gear-pill">🔘 Panasonic Lumix S 24mm f/1.8 (Gilden Close Strike)</div>
+        <div class="gear-pill">🔘 Summicron-M APO 35mm f/2 ASPH (Manual M-Glass)</div>
+        <div class="gear-pill">🔘 Panasonic Lumix S 50mm f/1.8 (Comfort Portraits)</div>
+        <div class="gear-pill">⚡ Handheld Off-Camera Flash (High Angle Left)</div>
+      </div>
+    </div>
+
+    <!-- TAB 1: 18-WEEK ROADMAP -->
+    <section id="pane-roadmap" class="tab-pane active">
+      <div style="margin-bottom: 24px;">
+        <h2 style="font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Masterclass Preparation Curriculum</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+          Progressive desensitization from safe distance and hip-shooting to 3-foot flash confrontation.
+        </p>
+      </div>
+      <div id="roadmap-container">
+        <!-- Injected dynamically by app.js from curriculum.js -->
+      </div>
+    </section>
+
+    <!-- TAB 2: CRITIQUE CHAMBER -->
+    <section id="pane-critique" class="tab-pane">
+      <div style="margin-bottom: 24px;">
+        <h2 style="font-size: 24px; font-weight: 800; text-transform: uppercase;">The Magnum Critique Chamber</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+          Drop your street frames. EXIF is extracted automatically. The Bruce Gilden Agent, Flash Technician, and Curator will evaluate your boldness, light, and proximity.
+        </p>
+      </div>
+
+      <div class="critique-layout">
+        <!-- Uploader & Metadata Form -->
+        <div class="uploader-panel">
+          <div class="dropzone" id="photo-dropzone">
+            <div class="dropzone-icon">📷</div>
+            <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Drop your street photograph here</div>
+            <div style="font-size: 12px; color: var(--text-muted); font-family: var(--font-mono);">
+              Accepts JPG / PNG • Automatic EXIF Parsing
+            </div>
+            <input type="file" id="file-input" accept="image/jpeg,image/png" style="display: none;">
+          </div>
+
+          <div class="preview-container" id="preview-wrapper" style="display: none;">
+            <img id="image-preview" src="" alt="Preview">
+          </div>
+
+          <div class="meta-inputs-grid">
+            <div class="input-field">
+              <label>Frame Title</label>
+              <input type="text" id="input-title" placeholder="e.g. Crosswalk Collision" value="Sidewalk Encounter">
+            </div>
+            <div class="input-field">
+              <label>Focal Length</label>
+              <select id="input-focal">
+                <option value="24" selected>24mm (Lumix S 24mm)</option>
+                <option value="35">35mm (Summicron-M APO)</option>
+                <option value="50">50mm (Lumix S 50mm)</option>
+                <option value="75">75mm+ (Telephoto / Safe)</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label>Aperture</label>
+              <input type="number" id="input-aperture" step="0.1" value="8.0">
+            </div>
+            <div class="input-field">
+              <label>Shutter Speed</label>
+              <input type="text" id="input-shutter" value="1/250s">
+            </div>
+            <div class="input-field">
+              <label>Flash Status</label>
+              <select id="input-flash">
+                <option value="true" selected>⚡ Fired (Off-Camera Strobe)</option>
+                <option value="false">☀️ Off (Ambient Light Only)</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label>Estimated Distance</label>
+              <select id="input-distance">
+                <option value="0.9">0.9m / 3 ft (Extreme Close Strike)</option>
+                <option value="1.2" selected>1.2m / 4 ft (Arm's Reach / Gilden)</option>
+                <option value="1.8">1.8m / 6 ft (Conversational)</option>
+                <option value="3.5">3.5m+ (Distant / Safe)</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label>Stance / Technique</label>
+              <select id="input-hipshot">
+                <option value="false" selected>👁️ Committed (Viewfinder to Eye)</option>
+                <option value="true">🙈 Hip-Shot (Uncommitted / Sneaking)</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label>Emotional Sensation</label>
+              <select id="input-feeling">
+                <option value="terrified">⚡ Terrified (Heart > 140 BPM)</option>
+                <option value="nervous" selected>😬 Nervous / Alert</option>
+                <option value="comfortable">☕ Fully Comfortable / Relaxed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-field">
+            <label>Field Notes / Subject Reaction</label>
+            <textarea id="input-reflection" rows="2" placeholder="How did you approach them? Did you nod after the click? What was your pulse?">Stepped straight into his path, held the flash high in left hand, popped the strobe at 1.2m. He blinked, I gave a quick nod and kept walking.</textarea>
+          </div>
+
+          <button class="action-btn" id="btn-submit-critique">⚡ Run Magnum Critique</button>
+        </div>
+
+        <!-- Live Critique Results Panel -->
+        <div class="critique-results-panel" id="critique-results-box">
+          <!-- Bravery Card -->
+          <div class="bravery-score-card">
+            <div>
+              <div style="font-size: 11px; text-transform: uppercase; font-family: var(--font-mono); color: var(--text-muted); margin-bottom: 4px;">
+                Audited Bravery Rating
+              </div>
+              <div class="bravery-dial">
+                <span class="bravery-num" id="res-bravery">8</span>
+                <span class="bravery-denom">/ 10</span>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Proximity Zone</div>
+              <div id="res-proximity" style="font-size: 15px; font-weight: 700; color: #fff; margin-top: 4px;">
+                Decisive Zone (1.2m)
+              </div>
+              <div id="res-vault-tag" style="margin-top: 8px; font-size: 11px; font-weight: 700; color: var(--leica-red); font-family: var(--font-mono);">
+                RECOMMENDED: DISCOMFORT VAULT
+              </div>
+            </div>
+          </div>
+
+          <!-- Bruce Agent Card -->
+          <div class="agent-critique-card agent-bruce">
+            <div class="agent-header">
+              <div class="agent-avatar">B</div>
+              <div>
+                <div class="agent-name">Bruce Gilden Agent</div>
+                <div class="agent-title">MAGNUM PHOTOS • TOUGH LOVE STREET CRITIC</div>
+              </div>
+            </div>
+            <div class="agent-body" id="res-bruce-body">
+              "NOW we're talking! You popped that flash right at 4 feet! That's the theater of the street! Look at that expression—that's life, that's raw energy. You didn't apologize, you took the picture. Next time, don't even blink after you shoot—just give 'em that big smile and keep moving. Put this in the masterclass deck!"
+            </div>
+          </div>
+
+          <!-- Flash & Tech Card -->
+          <div class="agent-critique-card">
+            <div class="agent-header">
+              <div class="agent-avatar">⚡</div>
+              <div>
+                <div class="agent-name">Strobe & Optical Master</div>
+                <div class="agent-title">LEICA SL3-P 44MP & ZONE FOCUS ANALYSIS</div>
+              </div>
+            </div>
+            <div class="agent-body" id="res-tech-body">
+              • 24mm Perspective: The wide field of view creates dynamic geometric stretch on facial features. At 1.2m, the subject dominates the frame while keeping environmental context crisp.
+              • Flash Sync: At 1/250s, daylight ambient is suppressed. Inverse square law isolates the subject from distracting urban background clutter.
+              • Leica SL3-P 44MP: Resolving power captures crisp texture in skin, hair, and clothing.
+            </div>
+          </div>
+
+          <!-- Curator Card -->
+          <div class="agent-critique-card">
+            <div class="agent-header">
+              <div class="agent-avatar">🏛️</div>
+              <div>
+                <div class="agent-name">Akademie Curator</div>
+                <div class="agent-title">LEICA AKADEMIE MEXICO CITY CURATORIAL BOARD</div>
+              </div>
+            </div>
+            <div class="agent-body" id="res-curator-body">
+              Definitive entry for your Discomfort Vault. The visual tension, immediacy, and high Bravery Index fulfill the exact criteria Bruce Gilden demands at the Leica Akademie.
+            </div>
+          </div>
+
+          <!-- Save to Vault Action Box -->
+          <div class="save-to-vault-box" id="save-vault-actions">
+            <div>
+              <div style="font-weight: 700; font-size: 14px; text-transform: uppercase;">Commit to Portfolio:</div>
+              <div id="save-status-hint" style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                Review Bruce's critique above, then choose which vault to file this frame in:
+              </div>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="action-btn" id="btn-save-discomfort" style="background: var(--leica-red); padding: 10px 18px; font-size: 13px;">🔥 Add to Discomfort Vault</button>
+              <button class="action-btn" id="btn-save-comfort" style="background: var(--bg-elevated); color: var(--green); border: 1px solid var(--green); padding: 10px 18px; font-size: 13px;">🌱 Add to Comfort Vault</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: 50/50 DUAL VAULT -->
+    <section id="pane-vault" class="tab-pane">
+      <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+          <h2 style="font-size: 24px; font-weight: 800; text-transform: uppercase;">The 50/50 Masterclass Vault</h2>
+          <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+            Required Submission: Exactly 50 photographs where you felt comfortable, and 50 where you felt completely uncomfortable!
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="action-btn" id="filter-all-btn" style="padding: 6px 12px; font-size: 12px; background: var(--bg-elevated); border: 1px solid var(--border);">All Frames</button>
+          <button class="action-btn" id="filter-comfort-btn" style="padding: 6px 12px; font-size: 12px; background: rgba(46, 204, 113, 0.15); color: var(--green); border: 1px solid var(--green);">Comfort Only</button>
+          <button class="action-btn" id="filter-discomfort-btn" style="padding: 6px 12px; font-size: 12px; background: rgba(227, 6, 19, 0.15); color: var(--leica-red); border: 1px solid var(--leica-red);">Discomfort Only</button>
+          <button class="action-btn" id="btn-clean-duplicates" style="padding: 6px 12px; font-size: 12px; background: var(--bg-elevated); border: 1px solid var(--gold); color: var(--gold);" title="Remove accidental duplicates with the same title">🧹 Clean Duplicates</button>
+          <button class="action-btn" id="btn-export-backup" style="padding: 6px 12px; font-size: 12px; background: var(--bg-elevated); border: 1px solid var(--border);" title="Export complete portfolio to JSON">💾 Backup</button>
+          <button class="action-btn" id="btn-import-backup" style="padding: 6px 12px; font-size: 12px; background: var(--bg-elevated); border: 1px solid var(--border);" title="Restore portfolio from backup">📂 Restore</button>
+          <input type="file" id="backup-file-input" accept="application/json" style="display: none;">
+        </div>
+      </div>
+
+      <!-- Vault Progress Stats -->
+      <div class="vault-header-grid">
+        <div class="vault-stat-card comfort">
+          <div class="vault-stat-top">
+            <div>
+              <div class="vault-title" style="color: var(--green);">🌱 Comfort Vault</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Composed, consent, parade, or geometric frames</div>
+            </div>
+            <div class="vault-count" id="count-comfort" style="color: var(--green);">0 / 50</div>
+          </div>
+          <div class="vault-progress-bar">
+            <div class="progress-fill" id="progress-comfort" style="width: 0%;"></div>
+          </div>
+          <div style="font-size: 12px; font-family: var(--font-mono); color: var(--text-dim);" id="comfort-percent-text">
+            0% of quota complete
+          </div>
+        </div>
+
+        <div class="vault-stat-card discomfort">
+          <div class="vault-stat-top">
+            <div>
+              <div class="vault-title" style="color: var(--leica-red);">🔥 Discomfort Vault</div>
+              <div style="font-size: 12px; color: var(--text-muted);">&lt;1.2m proximity, flash pops, raw confrontation, 140+ BPM</div>
+            </div>
+            <div class="vault-count" id="count-discomfort" style="color: var(--leica-red);">0 / 50</div>
+          </div>
+          <div class="vault-progress-bar">
+            <div class="progress-fill" id="progress-discomfort" style="width: 0%;"></div>
+          </div>
+          <div style="font-size: 12px; font-family: var(--font-mono); color: var(--text-dim);" id="discomfort-percent-text">
+            0% of quota complete
+          </div>
+        </div>
+      </div>
+
+      <!-- Direct Multi-Photo Vault Dropzone -->
+      <div class="dropzone" id="vault-direct-dropzone" style="margin-bottom: 24px; padding: 24px 16px; border-style: dashed;">
+        <div class="dropzone-icon" style="font-size: 24px; margin-bottom: 6px;">📥</div>
+        <div style="font-weight: 700; font-size: 15px; margin-bottom: 2px;">Add Street Photos directly to Masterclass Vault</div>
+        <div style="font-size: 12px; color: var(--text-muted); font-family: var(--font-mono);">
+          Drop 1 or multiple JPG/PNG files here • Auto-extracts EXIF and saves permanently to your portfolio
+        </div>
+        <input type="file" id="vault-direct-input" multiple accept="image/jpeg,image/png" style="display: none;">
+      </div>
+
+      <!-- Photos Gallery Grid -->
+      <div id="vault-gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 4: ZONE FOCUS SIMULATOR -->
+    <section id="pane-zone-focus" class="tab-pane">
+      <div style="margin-bottom: 24px;">
+        <h2 style="font-size: 24px; font-weight: 800; text-transform: uppercase;">Zone Focus & Hyperfocal Engine</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+          Calibrated for the Leica SL3-P 44MP sensor (Circle of Confusion = 0.025mm). Eliminate autofocus hunting and commit to manual street distance.
+        </p>
+      </div>
+
+      <div class="zone-sim-layout">
+        <!-- Controls -->
+        <div class="zone-controls">
+          <div style="font-weight: 700; font-size: 14px; text-transform: uppercase; color: var(--text-muted); font-family: var(--font-mono);">
+            Lens & Exposure Parameters
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>FOCAL LENGTH:</span>
+              <span id="label-focal-val" style="color: var(--leica-red); font-weight: 700;">24mm</span>
+            </div>
+            <select id="sim-focal-select" style="background: var(--bg-elevated); border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: var(--radius-sm);">
+              <option value="24" selected>Panasonic Lumix S 24mm</option>
+              <option value="35">Leica Summicron-M APO 35mm f/2</option>
+              <option value="50">Panasonic Lumix S 50mm</option>
+            </select>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>APERTURE:</span>
+              <span id="label-aperture-val" style="color: var(--leica-red); font-weight: 700;">f/8.0</span>
+            </div>
+            <input type="range" id="sim-aperture-slider" min="2.0" max="16.0" step="0.5" value="8.0">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>FOCUS DISTANCE:</span>
+              <span id="label-focus-val" style="color: var(--leica-red); font-weight: 700;">1.2 meters</span>
+            </div>
+            <input type="range" id="sim-distance-slider" min="0.7" max="6.0" step="0.1" value="1.2">
+          </div>
+
+          <div style="border-top: 1px solid var(--border); padding-top: 14px;">
+            <div style="font-size: 11px; text-transform: uppercase; font-family: var(--font-mono); color: var(--text-muted); margin-bottom: 8px;">
+              Quick Tactical Presets:
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;" id="presets-button-container">
+              <!-- Injected by app.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Display -->
+        <div class="zone-display-panel">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <div style="font-size: 16px; font-weight: 700; text-transform: uppercase;">Optical Sharpness Zone</div>
+            <div style="font-size: 12px; font-family: var(--font-mono); color: var(--text-muted);">
+              44MP LEICA COF = 0.025mm
+            </div>
+          </div>
+
+          <!-- Distance Track Visualizer -->
+          <div class="distance-scale-visualizer">
+            <div class="scale-track">
+              <div class="sharp-zone-fill" id="scale-zone-bar" style="left: 15%; width: 35%;"></div>
+            </div>
+            <div class="scale-ticks">
+              <span>0.5m</span>
+              <span>1.0m</span>
+              <span>1.5m</span>
+              <span>2.0m</span>
+              <span>3.0m</span>
+              <span>5.0m</span>
+              <span>∞</span>
+            </div>
+          </div>
+
+          <!-- Numerical Readout -->
+          <div class="zone-stats-grid">
+            <div class="zone-stat-box">
+              <div class="zone-stat-label">Near Sharp Limit</div>
+              <div class="zone-stat-val" id="stat-near" style="color: var(--leica-red);">0.85m</div>
+            </div>
+            <div class="zone-stat-box">
+              <div class="zone-stat-label">Far Sharp Limit</div>
+              <div class="zone-stat-val" id="stat-far" style="color: var(--leica-red);">2.10m</div>
+            </div>
+            <div class="zone-stat-box">
+              <div class="zone-stat-label">Hyperfocal Distance</div>
+              <div class="zone-stat-val" id="stat-hyper">2.88m</div>
+            </div>
+          </div>
+
+          <div style="background: var(--bg-elevated); border-radius: var(--radius-md); padding: 18px; font-size: 13px; line-height: 1.6; border: 1px solid var(--border);">
+            <strong>Tactical Advice for this setting:</strong>
+            <p id="zone-tactical-advice" style="color: var(--text-muted); margin-top: 6px;">
+              With the 24mm at f/8 focused at 1.2m, anyone walking between 0.85m and 2.10m will be tack-sharp on your 44MP sensor. You don't need to look through the rangefinder or wait for autofocus. Just frame and fire!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: DARKROOM CONTACT SHEET -->
+    <section id="pane-contact-sheet" class="tab-pane">
+      <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+          <h2 style="font-size: 24px; font-weight: 800; text-transform: uppercase;">Darkroom Contact Sheet Lab</h2>
+          <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+            Simulated 35mm darkroom proof sheet. Click frames to circle them with Chinagraph Red Grease Pencil for the Masterclass selection table.
+          </p>
+        </div>
+        <button class="action-btn" onclick="window.print()" style="padding: 10px 18px; font-size: 13px;">🖨️ Print / Save Masterclass PDF</button>
+      </div>
+
+      <div id="contact-sheet-container">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 6: FIELD COMPANION -->
+    <section id="pane-field-sprint" class="tab-pane">
+      <div class="sprint-container">
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--leica-red); letter-spacing: 1px; font-family: var(--font-mono);">
+          Street Companion • Anti-Hesitation Engine
+        </div>
+        <h2 style="font-size: 28px; font-weight: 800; text-transform: uppercase; margin-top: 6px;">15-Minute Street Sprint</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 6px;">
+          Put in your earphones. Start your walk. This timer will rotate audio prompts every 3 minutes to keep you in flow state and prevent hip-shooting.
+        </p>
+
+        <div class="timer-digits" id="timer-display">15:00</div>
+
+        <div class="sprint-prompt-box">
+          <div class="sprint-prompt-title" id="sprint-drill-title">DRILL 1: The Gaze Anchor</div>
+          <div class="sprint-prompt-text" id="sprint-drill-text">
+            For the next 3 minutes: Walk with shoulders back and head high. Hold eye contact with approaching strangers for 1 full second until they break contact. Train your nervous system that you belong here.
+          </div>
+          <div class="sprint-mindset" id="sprint-drill-mindset">
+            "Fear lives in the hesitation. Walk like you own the sidewalk."
+          </div>
+        </div>
+
+        <div class="timer-controls">
+          <button class="action-btn" id="btn-timer-start">▶ Start Sprint</button>
+          <button class="action-btn" id="btn-timer-pause" style="background: var(--bg-elevated); border: 1px solid var(--border); display: none;">⏸ Pause</button>
+          <button class="action-btn" id="btn-timer-reset" style="background: var(--bg-elevated); border: 1px solid var(--border);">↺ Reset</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/db.js?v=2.5.0"></script>
+  <script src="js/curriculum.js?v=2.5.0"></script>
+  <script src="js/zone-focus.js?v=2.5.0"></script>
+  <script src="js/exif-reader.js?v=2.5.0"></script>
+  <script src="js/critic-engine.js?v=2.5.0"></script>
+  <script src="js/contact-sheet.js?v=2.5.0"></script>
+  <script src="js/field-timer.js?v=2.5.0"></script>
+  <script src="js/app.js?v=2.5.0"></script>
+</body>
 </html>

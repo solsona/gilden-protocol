@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 5. Initialize Photo Upload & Critique Engine
   initCritiqueUploader();
 
-  // 6. Initialize 50/50 Dual Vault
+  // 6. Initialize 50/50 Dual Vault with Resilient Dual Storage
   initVault();
 
   // 7. Initialize Field Companion Sprint Timer
@@ -27,6 +27,59 @@ document.addEventListener("DOMContentLoaded", () => {
 let currentPhotos = [];
 let currentVaultFilter = "all";
 let uploadedImageBase64 = null;
+let currentEvaluatedPhoto = null;
+
+/* ==========================================================================
+   TOAST NOTIFICATION HELPER
+   ========================================================================== */
+function showToast(message, isSuccess = true) {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+  const toast = document.createElement("div");
+  toast.className = `toast ${isSuccess ? "success" : ""}`;
+  toast.innerHTML = `<span>${message}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateX(30px)";
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+/* ==========================================================================
+   IMAGE COMPRESSION HELPER (Converts 44MP raw inputs to fast Retina display)
+   ========================================================================== */
+async function compressImageFile(file, maxDimension = 1600, quality = 0.85) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = () => resolve(e.target.result);
+      img.src = e.target.result;
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
 
 /* ==========================================================================
    1. COUNTDOWN CALCULATOR
@@ -70,7 +123,6 @@ function initTabs() {
         targetPane.classList.add("active");
       }
 
-      // Re-render contact sheet if switching to contact sheet tab
       if (tab.dataset.tab === "contact-sheet") {
         renderContactSheet();
       }
@@ -173,7 +225,6 @@ function initZoneSimulator() {
     statFar.textContent = result.farLimitM === "∞" ? "∞" : `${result.farLimitM}m`;
     statHyper.textContent = `${result.hyperfocalM.toFixed(2)}m`;
 
-    // Map distance limits to visual percentage (0.5m -> 0%, 6.0m -> 100%)
     const minScale = 0.5;
     const maxScale = 6.0;
     const leftPercent = Math.max(0, Math.min(100, ((result.nearLimitM - minScale) / (maxScale - minScale)) * 100));
@@ -187,7 +238,6 @@ function initZoneSimulator() {
     scaleZoneBar.style.left = `${leftPercent}%`;
     scaleZoneBar.style.width = `${widthPercent}%`;
 
-    // Tactical advice logic
     let advice = "";
     if (focal === 24 && distance <= 1.2 && aperture >= 8) {
       advice = `With the 24mm at f/${aperture.toFixed(1)} set to ${distance.toFixed(1)}m, you have the classic Gilden setup. Anything between ${result.nearLimitM}m and ${result.farLimitM}m is tack sharp. Do not wait for autofocus! One decisive step forward, fire the flash, and keep your stride.`;
@@ -201,7 +251,6 @@ function initZoneSimulator() {
     adviceText.textContent = advice;
   }
 
-  // Populate presets
   calc.getPresets().forEach(p => {
     const btn = document.createElement("button");
     btn.className = "action-btn";
@@ -247,7 +296,11 @@ function initCritiqueUploader() {
   const inputFeeling = document.getElementById("input-feeling");
   const inputReflection = document.getElementById("input-reflection");
 
-  const btnSubmit = document.getElementById("btn-submit-critique");
+  const btnCritique = document.getElementById("btn-submit-critique");
+  const saveVaultActions = document.getElementById("save-vault-actions");
+  const saveStatusHint = document.getElementById("save-status-hint");
+  const btnSaveDiscomfort = document.getElementById("btn-save-discomfort");
+  const btnSaveComfort = document.getElementById("btn-save-comfort");
 
   // Output fields
   const resBravery = document.getElementById("res-bravery");
@@ -268,29 +321,28 @@ function initCritiqueUploader() {
     dropzone.classList.remove("dragover");
   });
 
-  dropzone.addEventListener("drop", (e) => {
+  dropzone.addEventListener("drop", async (e) => {
     e.preventDefault();
     dropzone.classList.remove("dragover");
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFile(e.dataTransfer.files[0]);
+      await handleFile(e.dataTransfer.files[0]);
     }
   });
 
-  fileInput.addEventListener("change", () => {
+  fileInput.addEventListener("change", async () => {
     if (fileInput.files && fileInput.files[0]) {
-      handleFile(fileInput.files[0]);
+      await handleFile(fileInput.files[0]);
     }
   });
 
   async function handleFile(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      uploadedImageBase64 = e.target.result;
-      imagePreview.src = uploadedImageBase64;
-      previewWrapper.style.display = "flex";
-      inputTitle.value = file.name.replace(/\.[^/.]+$/, "");
-    };
-    reader.readAsDataURL(file);
+    showToast("📷 Processing & optimizing image...");
+    
+    // Auto-compress high-res images for smooth browser performance
+    uploadedImageBase64 = await compressImageFile(file, 1600, 0.85);
+    imagePreview.src = uploadedImageBase64;
+    previewWrapper.style.display = "flex";
+    inputTitle.value = file.name.replace(/\.[^/.]+$/, "");
 
     // Extract EXIF
     const exif = await ExifReader.extractFromBlob(file);
@@ -305,9 +357,11 @@ function initCritiqueUploader() {
       if (exif.shutterSpeed) inputShutter.value = exif.shutterSpeed;
       if (exif.flashFired !== undefined) inputFlash.value = exif.flashFired ? "true" : "false";
     }
+    
+    showToast(`✓ Loaded "${inputTitle.value}" with EXIF metadata.`);
   }
 
-  btnSubmit.addEventListener("click", () => {
+  btnCritique.addEventListener("click", async () => {
     const photoData = {
       id: "photo-" + Date.now(),
       title: inputTitle.value.trim() || "Untitled Frame",
@@ -330,6 +384,8 @@ function initCritiqueUploader() {
     photoData.vault = evalResult.recommendedVault;
     photoData.critique = evalResult.critiques;
 
+    currentEvaluatedPhoto = photoData;
+
     // Display in UI
     resBravery.textContent = evalResult.braveryScore;
     resProximity.textContent = evalResult.proximityZone;
@@ -340,121 +396,289 @@ function initCritiqueUploader() {
     resTech.textContent = evalResult.critiques.tech;
     resCurator.textContent = evalResult.critiques.curator;
 
-    // Save to Vault
-    savePhotoToVault(photoData);
+    // Automatically commit to the recommended vault so it is NEVER lost on refresh!
+    await commitPhotoToVault(photoData);
+
+    // Reveal and configure Quick Switch / Confirmation buttons
+    saveVaultActions.style.display = "flex";
+    updateSaveActionButtons(photoData);
   });
+
+  btnSaveDiscomfort.addEventListener("click", async () => {
+    if (!currentEvaluatedPhoto) return;
+    currentEvaluatedPhoto.vault = "discomfort";
+    await commitPhotoToVault(currentEvaluatedPhoto);
+    updateSaveActionButtons(currentEvaluatedPhoto);
+  });
+
+  btnSaveComfort.addEventListener("click", async () => {
+    if (!currentEvaluatedPhoto) return;
+    currentEvaluatedPhoto.vault = "comfort";
+    await commitPhotoToVault(currentEvaluatedPhoto);
+    updateSaveActionButtons(currentEvaluatedPhoto);
+  });
+
+  function updateSaveActionButtons(photo) {
+    if (photo.vault === "discomfort") {
+      saveStatusHint.innerHTML = `✓ Filed in: <strong style="color: var(--leica-red);">DISCOMFORT VAULT</strong> (Bravery: ${photo.braveryScore}/10)`;
+      btnSaveDiscomfort.textContent = "✓ In Discomfort Vault";
+      btnSaveComfort.textContent = "⇄ Move to Comfort";
+      btnSaveDiscomfort.style.boxShadow = "0 0 14px var(--leica-red-glow)";
+      btnSaveComfort.style.boxShadow = "none";
+    } else {
+      saveStatusHint.innerHTML = `✓ Filed in: <strong style="color: var(--green);">COMFORT VAULT</strong> (Bravery: ${photo.braveryScore}/10)`;
+      btnSaveComfort.textContent = "✓ In Comfort Vault";
+      btnSaveDiscomfort.textContent = "⇄ Move to Discomfort";
+      btnSaveComfort.style.boxShadow = "0 0 14px rgba(46, 204, 113, 0.4)";
+      btnSaveDiscomfort.style.boxShadow = "none";
+    }
+  }
+}
+
+async function commitPhotoToVault(photo) {
+  const existingIndex = currentPhotos.findIndex(p => p.title.trim().toLowerCase() === photo.title.trim().toLowerCase());
+
+  if (existingIndex !== -1) {
+    // Update existing photo instead of duplicating!
+    photo.id = currentPhotos[existingIndex].id;
+    currentPhotos[existingIndex] = photo;
+    await photoDB.savePhoto(photo);
+    showToast(`✓ Updated frame "${photo.title}" in ${photo.vault.toUpperCase()} Vault!`);
+  } else {
+    // Add new photo
+    currentPhotos.unshift(photo);
+    await photoDB.savePhoto(photo);
+    showToast(`✓ Saved "${photo.title}" to ${photo.vault.toUpperCase()} Vault!`);
+  }
+
+  updateVaultDisplay();
 }
 
 /* ==========================================================================
-   6. 50/50 DUAL VAULT
+   6. 50/50 DUAL VAULT (Persistent Storage with Multi-Photo Uploader)
    ========================================================================== */
 async function initVault() {
-  // Load photos from server or fallback to initial store
   try {
-    const res = await fetch("/api/vault");
-    if (res.ok) {
-      const data = await res.json();
-      currentPhotos = data.photos || [];
-    } else {
-      loadFallbackPhotos();
+    // 1. Initialize Storage Engine
+    await photoDB.init();
+
+    // 2. Load all photos
+    currentPhotos = await photoDB.getAllPhotos();
+
+    // 3. Seed initial sample photos only if completely empty
+    if (!currentPhotos || currentPhotos.length === 0) {
+      const initialSeeds = [
+        {
+          id: "sample-1",
+          title: "Pride Parade Feather Portrait",
+          vault: "comfort",
+          imageUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80",
+          focalLength: 50,
+          aperture: 2.0,
+          shutterSpeed: "1/1000s",
+          flashFired: false,
+          distance: 1.8,
+          braveryScore: 5,
+          critique: {
+            bruce: "Nice face, clean light. But it's polite. You asked permission, they gave you their camera smile. Where is the surprise?",
+            tech: "Sharp rendition on the eyes, beautiful shallow depth of field with the 50mm.",
+            curator: "Strong entry for the Comfort Vault. Demonstrates connection and classical framing."
+          },
+          reflection: "Felt completely relaxed. Approached them at the parade, complimented their headpiece. Total comfort zone.",
+          createdAt: "2026-08-15T14:30:00Z"
+        },
+        {
+          id: "sample-2",
+          title: "Subway Rush Hour Collision",
+          vault: "discomfort",
+          imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1000&q=80",
+          focalLength: 24,
+          aperture: 8.0,
+          shutterSpeed: "1/250s",
+          flashFired: true,
+          distance: 0.9,
+          braveryScore: 9,
+          critique: {
+            bruce: "NOW we're talking! Look at that furrow in the brow! You didn't give him time to hide. The flash caught the sweat on his temple. That's a real character!",
+            tech: "Masterful daylight flash sync at 1/250s. 24mm perspective freezes motion crisp edge-to-edge.",
+            curator: "Exceptional Discomfort submission. Raw, confrontational, quintessential Magnum street energy."
+          },
+          reflection: "Heart was beating at 145 BPM. Flash held high in left hand, stepped right into his path at 3 feet. Terrifying but exhilarating.",
+          createdAt: "2026-08-28T18:15:00Z"
+        },
+        {
+          id: "sample-3",
+          title: "Shadow Crosser (Safe Distance)",
+          vault: "comfort",
+          imageUrl: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1000&q=80",
+          focalLength: 35,
+          aperture: 8.0,
+          shutterSpeed: "1/500s",
+          flashFired: false,
+          distance: 4.2,
+          braveryScore: 3,
+          critique: {
+            bruce: "Why are you all the way across the street? The geometry is pretty, but get in the arena! Don't play safe!",
+            tech: "Summicron-M APO 35mm optical perfection is visible in the pavement microcontrast.",
+            curator: "Classic graphic street composition. Good contrast and silhouetting for the Comfort balance."
+          },
+          reflection: "Standing across the street waiting for someone to enter the light beam. Safe distance.",
+          createdAt: "2026-08-20T11:00:00Z"
+        }
+      ];
+      for (const p of initialSeeds) {
+        await photoDB.savePhoto(p);
+      }
+      currentPhotos = await photoDB.getAllPhotos();
     }
-  } catch (e) {
-    loadFallbackPhotos();
+  } catch (err) {
+    console.warn("Vault initialization notice:", err);
+    currentPhotos = photoDB.getLocalBackup();
   }
 
   updateVaultDisplay();
 
-  // Filter buttons
+  // 1. Direct Multi-Photo Dropzone
+  const vaultDropzone = document.getElementById("vault-direct-dropzone");
+  const vaultDirectInput = document.getElementById("vault-direct-input");
+
+  if (vaultDropzone && vaultDirectInput) {
+    vaultDropzone.addEventListener("click", () => vaultDirectInput.click());
+
+    vaultDropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      vaultDropzone.classList.add("dragover");
+    });
+
+    vaultDropzone.addEventListener("dragleave", () => {
+      vaultDropzone.classList.remove("dragover");
+    });
+
+    vaultDropzone.addEventListener("drop", async (e) => {
+      e.preventDefault();
+      vaultDropzone.classList.remove("dragover");
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        await processBatchVaultUpload(e.dataTransfer.files);
+      }
+    });
+
+    vaultDirectInput.addEventListener("change", async () => {
+      if (vaultDirectInput.files && vaultDirectInput.files.length > 0) {
+        await processBatchVaultUpload(vaultDirectInput.files);
+      }
+    });
+  }
+
+  // 2. Vault Controls
   const btnAll = document.getElementById("filter-all-btn");
   const btnComfort = document.getElementById("filter-comfort-btn");
   const btnDiscomfort = document.getElementById("filter-discomfort-btn");
+  const btnCleanDupes = document.getElementById("btn-clean-duplicates");
+  const btnExport = document.getElementById("btn-export-backup");
+  const btnImport = document.getElementById("btn-import-backup");
+  const backupFileInput = document.getElementById("backup-file-input");
 
   btnAll.addEventListener("click", () => { currentVaultFilter = "all"; updateVaultDisplay(); });
   btnComfort.addEventListener("click", () => { currentVaultFilter = "comfort"; updateVaultDisplay(); });
   btnDiscomfort.addEventListener("click", () => { currentVaultFilter = "discomfort"; updateVaultDisplay(); });
+
+  // Clean duplicates button
+  btnCleanDupes.addEventListener("click", async () => {
+    const removedCount = await photoDB.removeDuplicates();
+    currentPhotos = await photoDB.getAllPhotos();
+    updateVaultDisplay();
+    if (removedCount > 0) {
+      showToast(`🧹 Removed ${removedCount} duplicate frame(s)! Vault is clean.`);
+    } else {
+      showToast(`✓ No duplicates found. Your portfolio is clean.`);
+    }
+  });
+
+  // Export Backup JSON
+  btnExport.addEventListener("click", () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentPhotos, null, 2));
+    const dlAnchor = document.createElement("a");
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `gilden_vault_backup_${new Date().toISOString().slice(0, 10)}.json`);
+    dlAnchor.click();
+    showToast("💾 Vault backup JSON downloaded.");
+  });
+
+  // Import Backup JSON
+  btnImport.addEventListener("click", () => backupFileInput.click());
+  backupFileInput.addEventListener("change", async () => {
+    if (backupFileInput.files && backupFileInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            for (const p of imported) {
+              await photoDB.savePhoto(p);
+            }
+            currentPhotos = await photoDB.getAllPhotos();
+            updateVaultDisplay();
+            showToast(`📂 Successfully imported ${imported.length} photos into your Vault!`);
+          }
+        } catch (err) {
+          alert("Invalid backup file format.");
+        }
+      };
+      reader.readAsText(backupFileInput.files[0]);
+    }
+  });
 }
 
-function loadFallbackPhotos() {
-  const local = localStorage.getItem("gilden_protocol_photos");
-  if (local) {
-    currentPhotos = JSON.parse(local);
-  } else {
-    // Initial demo seed
-    currentPhotos = [
-      {
-        id: "sample-1",
-        title: "Pride Parade Feather Portrait",
-        vault: "comfort",
-        imageUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80",
-        focalLength: 50,
-        aperture: 2.0,
-        shutterSpeed: "1/1000s",
-        flashFired: false,
-        distance: 1.8,
-        braveryScore: 5,
-        critique: {
-          bruce: "Nice face, clean light. But it's polite. You asked permission, they gave you their camera smile. Where is the surprise?",
-          tech: "Sharp rendition on the eyes, beautiful shallow depth of field with the 50mm.",
-          curator: "Strong entry for the Comfort Vault. Demonstrates connection and classical framing."
-        },
-        reflection: "Felt completely relaxed. Approached them at the parade, complimented their headpiece. Total comfort zone."
-      },
-      {
-        id: "sample-2",
-        title: "Subway Rush Hour Collision",
-        vault: "discomfort",
-        imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1000&q=80",
-        focalLength: 24,
-        aperture: 8.0,
-        shutterSpeed: "1/250s",
-        flashFired: true,
-        distance: 0.9,
-        braveryScore: 9,
-        critique: {
-          bruce: "NOW we're talking! Look at that furrow in the brow! You didn't give him time to hide. The flash caught the sweat on his temple. That's a real character!",
-          tech: "Masterful daylight flash sync at 1/250s. 24mm perspective freezes motion crisp edge-to-edge.",
-          curator: "Exceptional Discomfort submission. Raw, confrontational, quintessential Magnum street energy."
-        },
-        reflection: "Heart was beating at 145 BPM. Flash held high in left hand, stepped right into his path at 3 feet. Terrifying but exhilarating."
-      },
-      {
-        id: "sample-3",
-        title: "Shadow Crosser (Safe Distance)",
-        vault: "comfort",
-        imageUrl: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1000&q=80",
-        focalLength: 35,
-        aperture: 8.0,
-        shutterSpeed: "1/500s",
-        flashFired: false,
-        distance: 4.2,
-        braveryScore: 3,
-        critique: {
-          bruce: "Why are you all the way across the street? The geometry is pretty, but get in the arena! Don't play safe!",
-          tech: "Summicron-M APO 35mm optical perfection is visible in the pavement microcontrast.",
-          curator: "Classic graphic street composition. Good contrast and silhouetting for the Comfort balance."
-        },
-        reflection: "Standing across the street waiting for someone to enter the light beam. Safe distance."
-      }
-    ];
+// Batch upload handler for multiple street photos
+async function processBatchVaultUpload(fileList) {
+  showToast(`📥 Processing ${fileList.length} photo(s)...`);
+  let added = 0;
+
+  for (let i = 0; i < fileList.length; i++) {
+    const file = fileList[i];
+    const compressedUrl = await compressImageFile(file, 1600, 0.85);
+    const exif = await ExifReader.extractFromBlob(file);
+
+    const focal = exif && exif.focalLength ? exif.focalLength : 24;
+    const aperture = exif && exif.aperture ? exif.aperture : 8.0;
+    const shutter = exif && exif.shutterSpeed ? exif.shutterSpeed : "1/250s";
+    const flash = exif && exif.flashFired !== undefined ? exif.flashFired : false;
+    const title = file.name.replace(/\.[^/.]+$/, "");
+
+    // Initial critique evaluation
+    const evalResult = CriticEngine.evaluatePhoto({
+      focalLength: focal,
+      aperture: aperture,
+      shutterSpeed: shutter,
+      flashFired: flash,
+      distance: 1.2,
+      isHipShot: false,
+      title: title
+    });
+
+    const photoData = {
+      id: "photo-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6),
+      title: title,
+      imageUrl: compressedUrl,
+      focalLength: focal,
+      aperture: aperture,
+      shutterSpeed: shutter,
+      flashFired: flash,
+      distance: 1.2,
+      braveryScore: evalResult.braveryScore,
+      vault: evalResult.recommendedVault,
+      critique: evalResult.critiques,
+      reflection: "Added from Week 1 street walk.",
+      createdAt: new Date().toISOString()
+    };
+
+    await photoDB.savePhoto(photoData);
+    added++;
   }
-}
 
-function savePhotoToVault(photo) {
-  currentPhotos.unshift(photo);
-  localStorage.setItem("gilden_protocol_photos", JSON.stringify(currentPhotos));
-  
-  // Also send to server
-  fetch("/api/vault/add", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(photo)
-  }).catch(() => {});
-
+  currentPhotos = await photoDB.getAllPhotos();
   updateVaultDisplay();
-
-  // Switch to Vault tab
-  const vaultTab = document.querySelector('[data-tab="vault"]');
-  if (vaultTab) vaultTab.click();
+  showToast(`✓ Added ${added} photo(s) directly to your Masterclass Vault!`);
 }
 
 function updateVaultDisplay() {
@@ -482,6 +706,12 @@ function updateVaultDisplay() {
 
   comfortPercentText.textContent = `${comfortPct}% of 50-photo quota`;
   discomfortPercentText.textContent = `${discomfortPct}% of 50-photo quota`;
+
+  // Update tab navigation text
+  const vaultTabBtn = document.querySelector('[data-tab="vault"]');
+  if (vaultTabBtn) {
+    vaultTabBtn.textContent = `🗄️ 50/50 Dual Vault (${comfortCount}🌱 / ${discomfortCount}🔥)`;
+  }
 
   // Render gallery cards
   const gallery = document.getElementById("vault-gallery-grid");
@@ -529,20 +759,25 @@ function updateVaultDisplay() {
   });
 }
 
-window.togglePhotoVault = function(id) {
+window.togglePhotoVault = async function(id) {
   const p = currentPhotos.find(x => x.id === id);
   if (p) {
     p.vault = p.vault === "comfort" ? "discomfort" : "comfort";
-    localStorage.setItem("gilden_protocol_photos", JSON.stringify(currentPhotos));
+    await photoDB.savePhoto(p);
     updateVaultDisplay();
+    showToast(`⇄ Moved "${p.title}" to ${p.vault.toUpperCase()} Vault.`);
   }
 };
 
-window.deletePhoto = function(id) {
-  if (confirm("Remove this frame from your masterclass portfolio?")) {
+window.deletePhoto = async function(id) {
+  const target = currentPhotos.find(x => x.id === id);
+  const title = target ? target.title : "this frame";
+  
+  if (confirm(`Remove "${title}" from your masterclass portfolio?`)) {
+    await photoDB.deletePhoto(id);
     currentPhotos = currentPhotos.filter(x => x.id !== id);
-    localStorage.setItem("gilden_protocol_photos", JSON.stringify(currentPhotos));
     updateVaultDisplay();
+    showToast(`🗑️ Removed "${title}" from portfolio.`);
   }
 };
 
