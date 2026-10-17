@@ -4,7 +4,8 @@
   "description": "Street Photography Training & Multi-Agent Critique System for Leica Masterclass",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "deploy": "firebase deploy --only hosting"
   },
   "keywords": ["leica", "street-photography", "bruce-gilden", "zone-focus", "critique"],
   "author": "solsona",
